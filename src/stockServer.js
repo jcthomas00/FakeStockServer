@@ -98,6 +98,12 @@ var StockServer = /** @class */ (function () {
         this.io.on('connect', function (socket) {
             console.log("New Client Connected. Id: ".concat(socket.id));
             var lobby = '';
+            var intervals = [];
+            socket.on("disconnect", function () {
+                intervals.forEach(function (item) {
+                    clearInterval(item);
+                });
+            });
             /* List check */
             socket.on('list', function () { return socket.emit('list', {
                 symbols: StockServer.SYMBOLS,
@@ -110,7 +116,7 @@ var StockServer = /** @class */ (function () {
                 obj.symbols.forEach(function (sym) {
                     socket.emit('live', _this.getLiveData(sym));
                 });
-                setInterval(function () {
+                var interval = setInterval(function () {
                     _this.io.allSockets().then(console.log);
                     obj.symbols.forEach(function (sym) {
                         socket.emit('live', _this.getLiveData(sym));

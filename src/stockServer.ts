@@ -115,6 +115,13 @@ export class StockServer {
         this.io.on('connect', (socket: any) => {
             console.log(`New Client Connected. Id: ${socket.id}`)
             let lobby: string = ''
+            let intervals = [];
+
+            socket.on("disconnect", () => {
+                intervals.forEach(item => {
+                    clearInterval(item);
+                });
+            });
 
             /* List check */
             socket.on('list', () => socket.emit('list', {
@@ -130,7 +137,7 @@ export class StockServer {
                 obj.symbols.forEach(sym => {
                     socket.emit('live', this.getLiveData(sym))
                 });
-                setInterval(()=>{
+                let interval = setInterval(()=>{
                     this.io.allSockets().then(console.log);
                     obj.symbols.forEach(sym => {
                         socket.emit('live', this.getLiveData(sym))
