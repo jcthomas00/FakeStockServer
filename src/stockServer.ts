@@ -67,6 +67,11 @@ export class StockServer {
             "response-type": "historical",
             data:[]
         };
+        if (!obj.symbols)
+        {
+            return output;
+        }
+
         obj.symbols.forEach(element => {
             if(!StockServer.dummyData[element]){
                 output.data.push({
@@ -134,17 +139,24 @@ export class StockServer {
 
             // Live
             socket.on('live', (obj) => {
-                obj.symbols.forEach(sym => {
-                    socket.emit('live', this.getLiveData(sym))
-                });
-                let interval = setInterval(()=>{
-                    this.io.allSockets().then(console.log);
+                if (obj.symbols)
+                {
                     obj.symbols.forEach(sym => {
                         socket.emit('live', this.getLiveData(sym))
                     });
-                },5000)
-
-                intervals.push(interval);
+                    let interval = setInterval(()=>{
+                        this.io.allSockets().then(console.log);
+                        obj.symbols.forEach(sym => {
+                            socket.emit('live', this.getLiveData(sym))
+                        });
+                    },5000)
+    
+                    intervals.push(interval);
+                }
+                else
+                {
+                    socket.emit('live', "Error! Invalid object");
+                }
             })
         })
     }

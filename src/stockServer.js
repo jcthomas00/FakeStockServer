@@ -50,6 +50,9 @@ var StockServer = /** @class */ (function () {
             "response-type": "historical",
             data: []
         };
+        if (!obj.symbols) {
+            return output;
+        }
         obj.symbols.forEach(function (element) {
             if (!StockServer.dummyData[element]) {
                 output.data.push({
@@ -113,16 +116,21 @@ var StockServer = /** @class */ (function () {
             socket.on('historical', function (obj) { return socket.emit('historical', _this.getHistoricalData(obj)); });
             // Live
             socket.on('live', function (obj) {
-                obj.symbols.forEach(function (sym) {
-                    socket.emit('live', _this.getLiveData(sym));
-                });
-                var interval = setInterval(function () {
-                    _this.io.allSockets().then(console.log);
+                if (obj.symbols) {
                     obj.symbols.forEach(function (sym) {
                         socket.emit('live', _this.getLiveData(sym));
                     });
-                }, 5000);
-                intervals.push(interval);
+                    var interval = setInterval(function () {
+                        _this.io.allSockets().then(console.log);
+                        obj.symbols.forEach(function (sym) {
+                            socket.emit('live', _this.getLiveData(sym));
+                        });
+                    }, 5000);
+                    intervals.push(interval);
+                }
+                else {
+                    socket.emit('live', "Error! Invalid object");
+                }
             });
         });
     };
