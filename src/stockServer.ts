@@ -143,6 +143,8 @@ export class StockServer {
                         socket.emit('live', this.getLiveData(sym))
                     });
                 },5000)
+
+                intervals.push(interval);
             })
         })
     }

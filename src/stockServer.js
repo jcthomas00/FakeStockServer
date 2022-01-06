@@ -122,6 +122,7 @@ var StockServer = /** @class */ (function () {
                         socket.emit('live', _this.getLiveData(sym));
                     });
                 }, 5000);
+                intervals.push(interval);
             });
         });
     };
