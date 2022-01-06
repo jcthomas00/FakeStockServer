@@ -111,6 +111,7 @@ var StockServer = /** @class */ (function () {
                     socket.emit('live', _this.getLiveData(sym));
                 });
                 setInterval(function () {
+                    _this.io.allSockets().then(console.log);
                     obj.symbols.forEach(function (sym) {
                         socket.emit('live', _this.getLiveData(sym));
                     });

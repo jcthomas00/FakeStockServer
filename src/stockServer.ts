@@ -131,6 +131,7 @@ export class StockServer {
                     socket.emit('live', this.getLiveData(sym))
                 });
                 setInterval(()=>{
+                    this.io.allSockets().then(console.log);
                     obj.symbols.forEach(sym => {
                         socket.emit('live', this.getLiveData(sym))
                     });
