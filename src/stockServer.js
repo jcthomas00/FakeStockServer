@@ -56,7 +56,7 @@ var StockServer = /** @class */ (function () {
                     high = (rands[1] + (5 * Math.random())).toFixed(2);
                 }
                 else {
-                    var rand = _this.myrand(max, min);
+                    var rand = +prevOpen + _this.myrand(10, -10);
                     open = rand.toFixed(2);
                     low = ((rand < +prevOpen ? rand : +prevOpen) - (5 * Math.random())).toFixed(2);
                     close_1 = prevOpen;
@@ -77,7 +77,7 @@ var StockServer = /** @class */ (function () {
                 var low = "";
                 var prevClose = StockServer.dummyData[sym][0].close;
                 console.log(max, min);
-                var rand = _this.myrand(max, min);
+                var rand = +prevClose + _this.myrand(10, -10);
                 close = rand.toFixed(2);
                 high = ((rand > +prevClose ? rand : +prevClose) + (5 * Math.random())).toFixed(2);
                 low = ((rand < +prevClose ? rand : +prevClose) - (5 * Math.random())).toFixed(2);
