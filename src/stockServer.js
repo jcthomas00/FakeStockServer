@@ -81,7 +81,7 @@ var StockServer = /** @class */ (function () {
                 var len = StockServer.dummyData[element].length;
                 var index = -1;
                 for (var i = len - 1; i >= 0; i--) {
-                    if (StockServer.dummyData[element][i].timestamp >= obj.start) {
+                    if (StockServer.dummyData[element][i].timestamp < obj.start) {
                         index = i;
                         break;
                     }

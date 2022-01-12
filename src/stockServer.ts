@@ -109,7 +109,7 @@ export class StockServer {
                 let index = -1;
                 for (let i = len-1; i >= 0; i--)
                 {
-                    if (StockServer.dummyData[element][i].timestamp >= obj.start)
+                    if (StockServer.dummyData[element][i].timestamp < obj.start)
                     {
                         index = i;
                         break;
