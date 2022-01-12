@@ -107,9 +107,13 @@ export class StockServer {
             {
                 let len = StockServer.dummyData[element].length;
                 let index = -1;
+
+                console.log(StockServer.dummyData[element][0].timestamp >= new Date(obj.start));
+                console.log(StockServer.dummyData[element][len-1].timestamp >= new Date(obj.start));
+                
                 for (let i = len-1; i >= 0; i--)
                 {
-                    if (StockServer.dummyData[element][i].timestamp < obj.start)
+                    if (StockServer.dummyData[element][i].timestamp >= new Date(obj.start))
                     {
                         index = i;
                         break;
