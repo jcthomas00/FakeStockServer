@@ -12,6 +12,11 @@ var StockServer = /** @class */ (function () {
         this.listen();
         this.createDummyData();
     }
+    StockServer.prototype.myrand = function (max, min) {
+        max -= (25 * Math.random());
+        min += (25 * Math.random());
+        return Math.random() * (max - min) + min;
+    };
     StockServer.prototype.createDummyData = function () {
         var _this = this;
         StockServer.SYMBOLS.forEach(function (sym) {
@@ -24,7 +29,7 @@ var StockServer = /** @class */ (function () {
             var prevOpen = '', bool = true;
             var open = '';
             for (var i = 0; i < iterations; i++) {
-                var arr = [Math.random() * (max - min) + min, Math.random() * (max - min) + min, Math.random() * (max - min) + min];
+                var arr = [_this.myrand(max, min), _this.myrand(max, min), _this.myrand(max, min)];
                 arr.sort();
                 arr.reverse();
                 open = arr[1].toFixed(2);
@@ -39,7 +44,7 @@ var StockServer = /** @class */ (function () {
                 prevOpen = open;
             }
             var interval = setInterval(function () {
-                var arr = [Math.random() * (max - min) + min, Math.random() * (max - min) + min, Math.random() * (max - min) + min];
+                var arr = [_this.myrand(max, min), _this.myrand(max, min), _this.myrand(max, min)];
                 arr.sort();
                 arr.reverse();
                 StockServer.dummyData[sym].unshift({

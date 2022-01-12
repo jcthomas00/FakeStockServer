@@ -25,6 +25,13 @@ export class StockServer {
         this.createDummyData()
     }
 
+    myrand(max: number, min: number): number
+    {
+        max -= (25*Math.random());
+        min += (25*Math.random());
+        return Math.random()*(max - min) + min;
+    }
+
     private createDummyData(): void
     {
         StockServer.SYMBOLS.forEach((sym) => {
@@ -41,7 +48,7 @@ export class StockServer {
             let prevOpen = '', bool = true;
             let open = '';
             for(let i = 0; i<iterations; i++){
-                let arr = [Math.random()*(max - min) + min, Math.random()*(max - min) + min, Math.random()*(max - min) + min];
+                let arr = [this.myrand(max, min), this.myrand(max, min), this.myrand(max, min)];
                 arr.sort();
                 arr.reverse();
                 open = arr[1].toFixed(2);
@@ -57,7 +64,7 @@ export class StockServer {
             }
 
             let interval = setInterval(() => {
-                let arr = [Math.random()*(max - min) + min, Math.random()*(max - min) + min, Math.random()*(max - min) + min];
+                let arr = [this.myrand(max, min), this.myrand(max, min), this.myrand(max, min)];
                 arr.sort();
                 arr.reverse();
                 StockServer.dummyData[sym].unshift({
