@@ -25,7 +25,8 @@ export class StockServer {
         this.createDummyData()
     }
 
-    private createDummyData():void{
+    private createDummyData(): void
+    {
         StockServer.SYMBOLS.forEach((sym) => {
             StockServer.dummyData[sym] = [];
 
@@ -70,6 +71,8 @@ export class StockServer {
 
             this.intervals.push(interval);
         })
+
+        console.log(StockServer.dummyData);
     }
 
     private createApp(): void {
@@ -80,7 +83,8 @@ export class StockServer {
         this.io = require('socket.io')(this.server, { cors: { origins: '*' } })
     }
 
-    private getHistoricalData(obj):Interfaces.Historical {
+    private getHistoricalData(obj): Interfaces.Historical
+    {
         console.log(obj, StockServer.dummyData);
         const output:Interfaces.Historical = {
             "response-type": "historical",
@@ -106,6 +110,7 @@ export class StockServer {
         });
         return output;
     }
+
     private getLiveData(sym):Interfaces.Live 
     {
         const output: Interfaces.Live = {
