@@ -116,6 +116,8 @@ export class StockServer {
                     }
                 }
 
+                console.log(index, len);
+
                 if (index != -1)
                 {
                     output.data.push({

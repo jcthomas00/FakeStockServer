@@ -86,6 +86,7 @@ var StockServer = /** @class */ (function () {
                         break;
                     }
                 }
+                console.log(index, len);
                 if (index != -1) {
                     output.data.push({
                         symbol: element,
