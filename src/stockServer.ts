@@ -81,6 +81,7 @@ export class StockServer {
     }
 
     private getHistoricalData(obj):Interfaces.Historical {
+        console.log(obj, StockServer.dummyData);
         const output:Interfaces.Historical = {
             "response-type": "historical",
             data:[]
