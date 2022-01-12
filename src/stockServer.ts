@@ -100,7 +100,9 @@ export class StockServer {
                 let low = "";
                 let prevClose = StockServer.dummyData[sym][0].close;
 
-                let rand = this.myrand(this.maxmin[sym].max, this.maxmin[sym].min);
+                console.log(max, min);
+
+                let rand = this.myrand(max, min);
                 close = rand.toFixed(2);
                 high = ((rand > +prevClose ? rand : +prevClose)+(5*Math.random())).toFixed(2);
                 low = ((rand < +prevClose ? rand : +prevClose)-(5*Math.random())).toFixed(2);
