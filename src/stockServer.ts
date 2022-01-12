@@ -72,7 +72,7 @@ export class StockServer {
             this.intervals.push(interval);
         })
 
-        console.log(StockServer.dummyData);
+        console.log(Object.keys(StockServer.dummyData), StockServer.dummyData["APPL"].length);
     }
 
     private createApp(): void {
@@ -85,7 +85,7 @@ export class StockServer {
 
     private getHistoricalData(obj): Interfaces.Historical
     {
-        console.log(obj, StockServer.dummyData);
+        console.log(obj, Object.keys(StockServer.dummyData));
         const output:Interfaces.Historical = {
             "response-type": "historical",
             data:[]

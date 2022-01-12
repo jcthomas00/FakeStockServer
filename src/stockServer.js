@@ -52,7 +52,7 @@ var StockServer = /** @class */ (function () {
             }, 1000 * 60);
             _this.intervals.push(interval);
         });
-        console.log(StockServer.dummyData);
+        console.log(Object.keys(StockServer.dummyData), StockServer.dummyData["APPL"].length);
     };
     StockServer.prototype.createApp = function () {
         this.app = express();
@@ -62,7 +62,7 @@ var StockServer = /** @class */ (function () {
         this.io = require('socket.io')(this.server, { cors: { origins: '*' } });
     };
     StockServer.prototype.getHistoricalData = function (obj) {
-        console.log(obj, StockServer.dummyData);
+        console.log(obj, Object.keys(StockServer.dummyData));
         var output = {
             "response-type": "historical",
             data: []
