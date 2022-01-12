@@ -120,7 +120,7 @@ export class StockServer {
                 {
                     output.data.push({
                         symbol: element, 
-                        data: StockServer.dummyData[element].slice(index),
+                        data: StockServer.dummyData[element].slice(0, index),
                     })
                 }
                 else
