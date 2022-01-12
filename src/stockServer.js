@@ -59,6 +59,7 @@ var StockServer = /** @class */ (function () {
                     var rand = _this.myrand(max, min);
                     open = rand.toFixed(2);
                     low = ((rand < +prevOpen ? rand : +prevOpen) - (5 * Math.random())).toFixed(2);
+                    close_1 = prevOpen;
                     high = ((rand > +prevOpen ? rand : +prevOpen) + (5 * Math.random())).toFixed(2);
                 }
                 StockServer.dummyData[sym].push({
@@ -66,7 +67,7 @@ var StockServer = /** @class */ (function () {
                     open: open,
                     high: high,
                     low: low,
-                    close: bool ? close_1 : prevOpen
+                    close: close_1
                 });
                 prevOpen = open;
             }

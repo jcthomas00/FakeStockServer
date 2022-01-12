@@ -71,16 +71,21 @@ export class StockServer {
 
                     let rands = [this.myrand(max, min), this.myrand(max, min)];
                     rands.sort();
+
                     open = rands[0].toFixed(2);
                     low = (rands[0]-(5*Math.random())).toFixed(2);
+
                     close = rands[1].toFixed(2);
                     high = (rands[1]+(5*Math.random())).toFixed(2);
                 }
                 else
                 {
                     let rand = this.myrand(max, min);
+
                     open = rand.toFixed(2);
                     low = ((rand < +prevOpen ? rand : +prevOpen)-(5*Math.random())).toFixed(2);
+                    
+                    close = prevOpen;
                     high = ((rand > +prevOpen ? rand : +prevOpen)+(5*Math.random())).toFixed(2);
                 }
 
@@ -89,7 +94,7 @@ export class StockServer {
                     open: open,
                     high: high,
                     low: low,
-                    close: bool ? close : prevOpen
+                    close: close,
                 })
                 prevOpen = open;
             }
