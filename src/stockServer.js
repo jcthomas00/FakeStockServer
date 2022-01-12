@@ -35,8 +35,8 @@ var StockServer = /** @class */ (function () {
         var _this = this;
         StockServer.SYMBOLS.forEach(function (sym) {
             StockServer.dummyData[sym] = [];
-            var max = Math.random() * (500 - 100) + 100;
-            var min = max - 50;
+            var max = Math.random() * (500 - 200) + 200;
+            var min = max - 10;
             _this.maxmin[sym] = { max: max, min: min };
             var iterations = 100 * 24 * 60;
             var time = Date.now();
@@ -56,13 +56,15 @@ var StockServer = /** @class */ (function () {
                     high = (rands[1] + (5 * Math.random())).toFixed(2);
                 }
                 else {
-                    var rand = +prevOpen + _this.myrand(10, -10);
+                    var rand = +prevOpen + _this.myrand(5, -5);
                     if (rand < min) {
                         min--;
+                        max--;
                         rand = min + _this.myrand(1, -1);
                     }
                     if (rand > max) {
                         max++;
+                        min++;
                         rand = max - _this.myrand(1, -1);
                     }
                     open = rand.toFixed(2);
@@ -85,13 +87,15 @@ var StockServer = /** @class */ (function () {
                 var low = "";
                 var prevClose = StockServer.dummyData[sym][0].close;
                 console.log(max, min);
-                var rand = +prevClose + _this.myrand(10, -10);
+                var rand = +prevClose + _this.myrand(5, -5);
                 if (rand < min) {
                     min--;
+                    max--;
                     rand = min + _this.myrand(1, -1);
                 }
                 if (rand > max) {
                     max++;
+                    min++;
                     rand = max - _this.myrand(1, -1);
                 }
                 close = rand.toFixed(2);
