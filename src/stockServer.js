@@ -13,8 +13,10 @@ var StockServer = /** @class */ (function () {
         this.createDummyData();
     }
     StockServer.prototype.myrand = function (max, min) {
-        max -= (25 * this.randn_bm());
-        min += (25 * this.randn_bm());
+        // max -= (25*this.randn_bm());
+        // min += (25*this.randn_bm());
+        max -= (25 * Math.random());
+        min += (25 * Math.random());
         return Math.random() * (max - min) + min;
     };
     StockServer.prototype.randn_bm = function () {
@@ -41,30 +43,48 @@ var StockServer = /** @class */ (function () {
             var prevOpen = '', bool = true;
             var open = '';
             for (var i = 0; i < iterations; i++) {
-                var arr = [_this.myrand(max, min), _this.myrand(max, min), _this.myrand(max, min)];
-                arr.sort();
-                arr.reverse();
-                open = arr[1].toFixed(2);
+                var high = "";
+                var close_1 = "";
+                var low = "";
+                if (bool) {
+                    bool = false;
+                    var rands = [_this.myrand(max, min), _this.myrand(max, min)];
+                    rands.sort();
+                    open = rands[0].toFixed(2);
+                    low = (rands[0] - (5 * Math.random())).toFixed(2);
+                    close_1 = rands[1].toFixed(2);
+                    high = (rands[1] + (5 * Math.random())).toFixed(2);
+                }
+                else {
+                    var rand = _this.myrand(max, min);
+                    open = rand.toFixed(2);
+                    low = ((rand < +prevOpen ? rand : +prevOpen) - (5 * Math.random())).toFixed(2);
+                    high = ((rand > +prevOpen ? rand : +prevOpen) + (5 * Math.random())).toFixed(2);
+                }
                 StockServer.dummyData[sym].push({
                     timestamp: new Date(time - (i * 1000 * 60)),
                     open: open,
-                    high: arr[0].toFixed(2) > prevOpen ? arr[0].toFixed(2) : prevOpen,
-                    low: arr[2].toFixed(2) < prevOpen || bool ? arr[2].toFixed(2) : prevOpen,
-                    close: bool ? (Math.random() * (max - min) + min).toFixed(2) : prevOpen
+                    high: high,
+                    low: low,
+                    close: bool ? close_1 : prevOpen
                 });
-                bool = false;
                 prevOpen = open;
             }
             var interval = setInterval(function () {
-                var arr = [_this.myrand(max, min), _this.myrand(max, min), _this.myrand(max, min)];
-                arr.sort();
-                arr.reverse();
+                var close = "";
+                var high = "";
+                var low = "";
+                var prevClose = StockServer.dummyData[sym][0].close;
+                var rand = _this.myrand(max, min);
+                close = rand.toFixed(2);
+                high = ((rand > +prevClose ? rand : +prevClose) + (5 * Math.random())).toFixed(2);
+                low = ((rand < +prevClose ? rand : +prevClose) - (5 * Math.random())).toFixed(2);
                 StockServer.dummyData[sym].unshift({
                     timestamp: new Date(StockServer.dummyData[sym][0].timestamp.getTime() + (1000 * 60)),
-                    open: StockServer.dummyData[sym][0].close,
-                    high: arr[0].toFixed(2) > StockServer.dummyData[sym][0].close ? arr[0].toFixed(2) : StockServer.dummyData[sym][0].close,
-                    low: arr[2].toFixed(2) < StockServer.dummyData[sym][0].close ? arr[2].toFixed(2) : StockServer.dummyData[sym][0].close,
-                    close: arr[1].toFixed(2)
+                    open: prevClose,
+                    high: high,
+                    low: low,
+                    close: close
                 });
             }, 1000 * 60);
             _this.intervals.push(interval);
