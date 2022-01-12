@@ -7,6 +7,7 @@ var http = require("http");
 var StockServer = /** @class */ (function () {
     function StockServer() {
         this.maxmin = {};
+        this.intervals = [];
         this.createApp();
         this.listen();
         this.createDummyData();
@@ -18,16 +19,17 @@ var StockServer = /** @class */ (function () {
             var max = Math.random() * (500 - 100) + 100;
             var min = max - 50;
             _this.maxmin[sym] = { max: max, min: min };
+            var iterations = 100 * 24 * 60;
             var time = Date.now();
             var prevOpen = '', bool = true;
             var open = '';
-            for (var i = 0; i < 100; i++) {
+            for (var i = 0; i < iterations; i++) {
                 var arr = [Math.random() * (max - min) + min, Math.random() * (max - min) + min, Math.random() * (max - min) + min];
                 arr.sort();
                 arr.reverse();
                 open = arr[1].toFixed(2);
                 StockServer.dummyData[sym].push({
-                    timestamp: new Date(time - i * 86400000).toString(),
+                    timestamp: new Date(time - (i * 1000 * 60)),
                     open: open,
                     high: arr[0].toFixed(2) > prevOpen ? arr[0].toFixed(2) : prevOpen,
                     low: arr[2].toFixed(2) < prevOpen || bool ? arr[2].toFixed(2) : prevOpen,
@@ -36,7 +38,21 @@ var StockServer = /** @class */ (function () {
                 bool = false;
                 prevOpen = open;
             }
+            var interval = setInterval(function () {
+                var arr = [Math.random() * (max - min) + min, Math.random() * (max - min) + min, Math.random() * (max - min) + min];
+                arr.sort();
+                arr.reverse();
+                StockServer.dummyData[sym].unshift({
+                    timestamp: new Date(StockServer.dummyData[sym][0].timestamp.getTime() + (1000 * 60)),
+                    open: StockServer.dummyData[sym][0].close,
+                    high: arr[0].toFixed(2) > StockServer.dummyData[sym][0].close ? arr[0].toFixed(2) : StockServer.dummyData[sym][0].close,
+                    low: arr[2].toFixed(2) < StockServer.dummyData[sym][0].close ? arr[2].toFixed(2) : StockServer.dummyData[sym][0].close,
+                    close: arr[1].toFixed(2)
+                });
+            }, 1000 * 60);
+            _this.intervals.push(interval);
         });
+        console.log(StockServer.dummyData);
     };
     StockServer.prototype.createApp = function () {
         this.app = express();
@@ -46,6 +62,7 @@ var StockServer = /** @class */ (function () {
         this.io = require('socket.io')(this.server, { cors: { origins: '*' } });
     };
     StockServer.prototype.getHistoricalData = function (obj) {
+        console.log(obj, StockServer.dummyData);
         var output = {
             "response-type": "historical",
             data: []
@@ -74,22 +91,8 @@ var StockServer = /** @class */ (function () {
             "response-type": "live",
             "new-value": { symbol: sym, data: [] }
         };
-        if (!StockServer.dummyData[sym]) {
-            //output['new-value'].data.push([])
-        }
-        else {
-            var max = this.maxmin[sym].max, min = this.maxmin[sym].min;
+        if (StockServer.dummyData[sym]) {
             output['new-value'].data.push(StockServer.dummyData[sym][0]);
-            var arr = [Math.random() * (max - min) + min, Math.random() * (max - min) + min, Math.random() * (max - min) + min];
-            arr.sort();
-            arr.reverse();
-            StockServer.dummyData[sym].unshift({
-                timestamp: new Date().toString(),
-                open: StockServer.dummyData[sym][0].close,
-                high: arr[0].toFixed(2) > StockServer.dummyData[sym][0].close ? arr[0].toFixed(2) : StockServer.dummyData[sym][0].close,
-                low: arr[2].toFixed(2) < StockServer.dummyData[sym][0].close ? arr[2].toFixed(2) : StockServer.dummyData[sym][0].close,
-                close: arr[1].toFixed(2)
-            });
         }
         return output;
     };
