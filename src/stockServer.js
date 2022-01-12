@@ -58,8 +58,10 @@ var StockServer = /** @class */ (function () {
                 else {
                     var rand = +prevOpen + _this.myrand(5, -5);
                     if (rand < min) {
-                        min--;
-                        max--;
+                        if (min > 20) {
+                            min--;
+                            max--;
+                        }
                         rand = min + _this.myrand(1, -1);
                     }
                     if (rand > max) {
@@ -89,8 +91,10 @@ var StockServer = /** @class */ (function () {
                 console.log(max, min);
                 var rand = +prevClose + _this.myrand(5, -5);
                 if (rand < min) {
-                    min--;
-                    max--;
+                    if (min > 20) {
+                        min--;
+                        max--;
+                    }
                     rand = min + _this.myrand(1, -1);
                 }
                 if (rand > max) {

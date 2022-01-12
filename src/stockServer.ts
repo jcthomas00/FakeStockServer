@@ -84,8 +84,11 @@ export class StockServer {
 
                     if (rand < min)
                     {
-                        min--;
-                        max--;
+                        if (min > 20)
+                        {
+                            min--;
+                            max--;
+                        }
                         rand = min + this.myrand(1, -1);
                     }
                     if (rand > max)
@@ -124,8 +127,11 @@ export class StockServer {
 
                 if (rand < min)
                 {
-                    min--;
-                    max--;
+                    if (min > 20)
+                    {
+                        min--;
+                        max--;
+                    }
                     rand = min + this.myrand(1, -1);
                 }
                 if (rand > max)
