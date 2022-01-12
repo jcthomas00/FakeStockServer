@@ -78,10 +78,26 @@ var StockServer = /** @class */ (function () {
                 });
             }
             else {
-                output.data.push({
-                    symbol: element,
-                    data: StockServer.dummyData[element].filter(function (dp) { return new Date(dp.timestamp) >= new Date(obj.start); })
-                });
+                var len = StockServer.dummyData[element].length;
+                var index = -1;
+                for (var i = len - 1; i >= 0; i--) {
+                    if (StockServer.dummyData[element][i].timestamp >= obj.start) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index != -1) {
+                    output.data.push({
+                        symbol: element,
+                        data: StockServer.dummyData[element].slice(index)
+                    });
+                }
+                else {
+                    output.data.push({
+                        symbol: element,
+                        data: []
+                    });
+                }
             }
         });
         return output;

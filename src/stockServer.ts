@@ -96,16 +96,41 @@ export class StockServer {
         }
 
         obj.symbols.forEach(element => {
-            if(!StockServer.dummyData[element]){
+            if (!StockServer.dummyData[element])
+            {
                 output.data.push({
-                    symbol:element, 
-                    data:[]
+                    symbol: element, 
+                    data: []
                 })
-            }else{
-            output.data.push({
-                    symbol:element, 
-                    data:StockServer.dummyData[element].filter(dp => new Date(dp.timestamp) >= new Date(obj.start))
-                })
+            }
+            else
+            {
+                let len = StockServer.dummyData[element].length;
+                let index = -1;
+                for (let i = len-1; i >= 0; i--)
+                {
+                    if (StockServer.dummyData[element][i].timestamp >= obj.start)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+
+                if (index != -1)
+                {
+                    output.data.push({
+                        symbol: element, 
+                        data: StockServer.dummyData[element].slice(index),
+                    })
+                }
+                else
+                {
+                    output.data.push({
+                        symbol: element, 
+                        data: []
+                    })
+                }
+
             }
         });
         return output;
