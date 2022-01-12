@@ -86,6 +86,7 @@ var StockServer = /** @class */ (function () {
                         break;
                     }
                 }
+                console.log(StockServer.dummyData[element][0].timestamp, StockServer.dummyData[element][len - 1].timestamp);
                 console.log(index, len);
                 if (index != -1) {
                     output.data.push({
