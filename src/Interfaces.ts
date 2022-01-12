@@ -19,7 +19,7 @@ export interface Live{
 }
 
 export interface DataPoint{
-        timestamp: string,
+        timestamp: Date,
         open: string,
         high: string,
         low: string,

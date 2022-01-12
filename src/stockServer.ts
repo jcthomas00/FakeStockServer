@@ -16,7 +16,8 @@ export class StockServer {
     private io: SocketIO.Server
     private port: string | number
 
-    private maxmin: {[symbol:string]: {max: number, min: number}} = {}
+    private maxmin: {[symbol:string]: {max: number, min: number}} = {};
+    private intervals: NodeJS.Timer[] = [];
 
     constructor() {
         this.createApp()
@@ -33,16 +34,18 @@ export class StockServer {
 
             this.maxmin[sym] = {max: max, min: min};
 
+            const iterations = 100 * 24 * 60;
+
             const time = Date.now()
             let prevOpen = '', bool = true;
             let open = '';
-            for(let i = 0; i<100; i++){
+            for(let i = 0; i<iterations; i++){
                 let arr = [Math.random()*(max - min) + min, Math.random()*(max - min) + min, Math.random()*(max - min) + min];
                 arr.sort();
                 arr.reverse();
                 open = arr[1].toFixed(2);
                 StockServer.dummyData[sym].push({
-                    timestamp: new Date(time-i*86400000).toString(),
+                    timestamp: new Date(time-(i*1000*60)),
                     open: open,
                     high:  arr[0].toFixed(2) > prevOpen ? arr[0].toFixed(2) : prevOpen,
                     low:  arr[2].toFixed(2) < prevOpen || bool ? arr[2].toFixed(2) : prevOpen,
@@ -51,6 +54,21 @@ export class StockServer {
                 bool = false;
                 prevOpen = open;
             }
+
+            let interval = setInterval(() => {
+                let arr = [Math.random()*(max - min) + min, Math.random()*(max - min) + min, Math.random()*(max - min) + min];
+                arr.sort();
+                arr.reverse();
+                StockServer.dummyData[sym].unshift({
+                    timestamp: new Date(StockServer.dummyData[sym][0].timestamp.getTime() + (1000*60)),
+                    open: StockServer.dummyData[sym][0].close,
+                    high:  arr[0].toFixed(2) > StockServer.dummyData[sym][0].close ? arr[0].toFixed(2) : StockServer.dummyData[sym][0].close,
+                    low:  arr[2].toFixed(2) < StockServer.dummyData[sym][0].close ? arr[2].toFixed(2) : StockServer.dummyData[sym][0].close,
+                    close:  arr[1].toFixed(2)
+                })
+            }, 1000*60);
+
+            this.intervals.push(interval);
         })
     }
 
@@ -87,26 +105,16 @@ export class StockServer {
         });
         return output;
     }
-    private getLiveData(sym):Interfaces.Live {
-        const output:Interfaces.Live = {
+    private getLiveData(sym):Interfaces.Live 
+    {
+        const output: Interfaces.Live = {
             "response-type": "live",
-            "new-value":{symbol:sym, data: []}
+            "new-value": {symbol: sym, data: []},
         };
-        if(!StockServer.dummyData[sym]){
-            //output['new-value'].data.push([])
-        }else{
-        const max = this.maxmin[sym].max, min = this.maxmin[sym].min;
-        output['new-value'].data.push(StockServer.dummyData[sym][0])
-        let arr = [Math.random()*(max - min) + min, Math.random()*(max - min) + min, Math.random()*(max - min) + min];
-        arr.sort();
-        arr.reverse();
-        StockServer.dummyData[sym].unshift({
-            timestamp: new Date().toString(),
-            open: StockServer.dummyData[sym][0].close,
-            high:  arr[0].toFixed(2) > StockServer.dummyData[sym][0].close ? arr[0].toFixed(2) : StockServer.dummyData[sym][0].close,
-            low:  arr[2].toFixed(2) < StockServer.dummyData[sym][0].close ? arr[2].toFixed(2) : StockServer.dummyData[sym][0].close,
-            close:  arr[1].toFixed(2)
-        })
+
+        if (StockServer.dummyData[sym])
+        {
+            output['new-value'].data.push(StockServer.dummyData[sym][0])
         }
        
         return output;
