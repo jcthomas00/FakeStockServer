@@ -98,8 +98,10 @@ var StockServer = /** @class */ (function () {
                     rand = min + _this.myrand(1, -1);
                 }
                 if (rand > max) {
-                    max++;
-                    min++;
+                    if (max < 1000) {
+                        max++;
+                        min++;
+                    }
                     rand = max - _this.myrand(1, -1);
                 }
                 close = rand.toFixed(2);

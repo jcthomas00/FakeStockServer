@@ -136,8 +136,11 @@ export class StockServer {
                 }
                 if (rand > max)
                 {
-                    max++;
-                    min++;
+                    if (max < 1000)
+                    {
+                        max++;
+                        min++;
+                    }
                     rand = max - this.myrand(1, -1);
                 }
 
