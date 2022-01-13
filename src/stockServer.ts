@@ -123,6 +123,8 @@ export class StockServer {
                 this.maxmin[sym].min = min;
             }
 
+            let first = true;
+
             let interval = setInterval(() => {
                 let close = "";
                 let high = "";
@@ -131,14 +133,21 @@ export class StockServer {
 
                 console.log(sym, this.maxmin, max, min);
 
-                if (max != this.maxmin[sym].max)
+                if (first)
                 {
-                    max = this.maxmin[sym].max;
-                }
+                    first = false;
 
-                if (min != this.maxmin[sym].min)
-                {
-                    min = this.maxmin[sym].min;
+                    if (max != this.maxmin[sym].max)
+                    {
+                        max = this.maxmin[sym].max;
+                    }
+    
+                    if (min != this.maxmin[sym].min)
+                    {
+                        min = this.maxmin[sym].min;
+                    }
+
+                    console.log(sym, this.maxmin, max, min);
                 }
 
                 let rand = +prevClose + this.myrand(2, -2);
