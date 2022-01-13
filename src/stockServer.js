@@ -15,8 +15,8 @@ var StockServer = /** @class */ (function () {
     StockServer.prototype.myrand = function (max, min) {
         // max -= (25*this.randn_bm());
         // min += (25*this.randn_bm());
-        max -= (25 * Math.random());
-        min += (25 * Math.random());
+        // max -= (2.5*Math.random());
+        // min += (2.5*Math.random());
         return Math.random() * (max - min) + min;
     };
     StockServer.prototype.randn_bm = function () {
@@ -35,10 +35,11 @@ var StockServer = /** @class */ (function () {
         var _this = this;
         StockServer.SYMBOLS.forEach(function (sym) {
             StockServer.dummyData[sym] = [];
-            var max = Math.random() * (500 - 200) + 200;
-            var min = max - 10;
+            var max = _this.myrand(200, 50);
+            var min = max - 5;
             _this.maxmin[sym] = { max: max, min: min };
             var iterations = 100 * 24 * 60;
+            var edge_var = 2;
             var time = Date.now();
             var prevOpen = '', bool = true;
             var open = '';
@@ -51,28 +52,28 @@ var StockServer = /** @class */ (function () {
                     var rands = [_this.myrand(max, min), _this.myrand(max, min)];
                     rands.sort();
                     open = rands[0].toFixed(2);
-                    low = (rands[0] - (5 * Math.random())).toFixed(2);
+                    low = (rands[0] - (edge_var * Math.random())).toFixed(2);
                     close_1 = rands[1].toFixed(2);
-                    high = (rands[1] + (5 * Math.random())).toFixed(2);
+                    high = (rands[1] + (edge_var * Math.random())).toFixed(2);
                 }
                 else {
-                    var rand = +prevOpen + _this.myrand(5, -5);
+                    var rand = +prevOpen + _this.myrand(2, -2);
                     if (rand < min) {
                         if (min > 20) {
                             min--;
                             max--;
                         }
-                        rand = min + _this.myrand(1, -1);
+                        rand = min + _this.myrand(1, -.5);
                     }
                     if (rand > max) {
                         max++;
                         min++;
-                        rand = max - _this.myrand(1, -1);
+                        rand = max - _this.myrand(.5, -1);
                     }
                     open = rand.toFixed(2);
-                    low = ((rand < +prevOpen ? rand : +prevOpen) - (5 * Math.random())).toFixed(2);
+                    low = ((rand < +prevOpen ? rand : +prevOpen) - (edge_var * Math.random())).toFixed(2);
                     close_1 = prevOpen;
-                    high = ((rand > +prevOpen ? rand : +prevOpen) + (5 * Math.random())).toFixed(2);
+                    high = ((rand > +prevOpen ? rand : +prevOpen) + (edge_var * Math.random())).toFixed(2);
                 }
                 StockServer.dummyData[sym].push({
                     timestamp: new Date(time - (i * 1000 * 60)),
@@ -89,24 +90,24 @@ var StockServer = /** @class */ (function () {
                 var low = "";
                 var prevClose = StockServer.dummyData[sym][0].close;
                 console.log(max, min);
-                var rand = +prevClose + _this.myrand(5, -5);
+                var rand = +prevClose + _this.myrand(2, -2);
                 if (rand < min) {
                     if (min > 20) {
                         min--;
                         max--;
                     }
-                    rand = min + _this.myrand(1, -1);
+                    rand = min + _this.myrand(1, -.5);
                 }
                 if (rand > max) {
                     if (max < 1000) {
                         max++;
                         min++;
                     }
-                    rand = max - _this.myrand(1, -1);
+                    rand = max - _this.myrand(.5, -1);
                 }
                 close = rand.toFixed(2);
-                high = ((rand > +prevClose ? rand : +prevClose) + (5 * Math.random())).toFixed(2);
-                low = ((rand < +prevClose ? rand : +prevClose) - (5 * Math.random())).toFixed(2);
+                high = ((rand > +prevClose ? rand : +prevClose) + (edge_var * Math.random())).toFixed(2);
+                low = ((rand < +prevClose ? rand : +prevClose) - (edge_var * Math.random())).toFixed(2);
                 StockServer.dummyData[sym].unshift({
                     timestamp: new Date(StockServer.dummyData[sym][0].timestamp.getTime() + (1000 * 60)),
                     open: prevClose,

@@ -29,8 +29,8 @@ export class StockServer {
     {
         // max -= (25*this.randn_bm());
         // min += (25*this.randn_bm());
-        max -= (25*Math.random());
-        min += (25*Math.random());
+        // max -= (2.5*Math.random());
+        // min += (2.5*Math.random());
         return Math.random()*(max - min) + min;
     }
 
@@ -49,12 +49,13 @@ export class StockServer {
         StockServer.SYMBOLS.forEach((sym) => {
             StockServer.dummyData[sym] = [];
 
-            let max = Math.random() * (500 - 200) + 200;
-            let min = max - 10;
+            let max = this.myrand(200, 50);
+            let min = max - 5;
 
             this.maxmin[sym] = {max: max, min: min};
 
             const iterations = 100 * 24 * 60;
+            const edge_var = 2;
 
             const time = Date.now()
             let prevOpen = '', bool = true;
@@ -73,14 +74,14 @@ export class StockServer {
                     rands.sort();
 
                     open = rands[0].toFixed(2);
-                    low = (rands[0]-(5*Math.random())).toFixed(2);
+                    low = (rands[0]-(edge_var*Math.random())).toFixed(2);
 
                     close = rands[1].toFixed(2);
-                    high = (rands[1]+(5*Math.random())).toFixed(2);
+                    high = (rands[1]+(edge_var*Math.random())).toFixed(2);
                 }
                 else
                 {
-                    let rand = +prevOpen + this.myrand(5, -5);
+                    let rand = +prevOpen + this.myrand(2, -2);
 
                     if (rand < min)
                     {
@@ -89,20 +90,20 @@ export class StockServer {
                             min--;
                             max--;
                         }
-                        rand = min + this.myrand(1, -1);
+                        rand = min + this.myrand(1, -.5);
                     }
                     if (rand > max)
                     {
                         max++;
                         min++;
-                        rand = max - this.myrand(1, -1);
+                        rand = max - this.myrand(.5, -1);
                     }
 
                     open = rand.toFixed(2);
-                    low = ((rand < +prevOpen ? rand : +prevOpen)-(5*Math.random())).toFixed(2);
+                    low = ((rand < +prevOpen ? rand : +prevOpen)-(edge_var*Math.random())).toFixed(2);
 
                     close = prevOpen;
-                    high = ((rand > +prevOpen ? rand : +prevOpen)+(5*Math.random())).toFixed(2);
+                    high = ((rand > +prevOpen ? rand : +prevOpen)+(edge_var*Math.random())).toFixed(2);
                 }
 
                 StockServer.dummyData[sym].push({
@@ -123,7 +124,7 @@ export class StockServer {
 
                 console.log(max, min);
 
-                let rand = +prevClose + this.myrand(5, -5);
+                let rand = +prevClose + this.myrand(2, -2);
 
                 if (rand < min)
                 {
@@ -132,7 +133,7 @@ export class StockServer {
                         min--;
                         max--;
                     }
-                    rand = min + this.myrand(1, -1);
+                    rand = min + this.myrand(1, -.5);
                 }
                 if (rand > max)
                 {
@@ -141,12 +142,12 @@ export class StockServer {
                         max++;
                         min++;
                     }
-                    rand = max - this.myrand(1, -1);
+                    rand = max - this.myrand(.5, -1);
                 }
 
                 close = rand.toFixed(2);
-                high = ((rand > +prevClose ? rand : +prevClose)+(5*Math.random())).toFixed(2);
-                low = ((rand < +prevClose ? rand : +prevClose)-(5*Math.random())).toFixed(2);
+                high = ((rand > +prevClose ? rand : +prevClose)+(edge_var*Math.random())).toFixed(2);
+                low = ((rand < +prevClose ? rand : +prevClose)-(edge_var*Math.random())).toFixed(2);
 
                 StockServer.dummyData[sym].unshift({
                     timestamp: new Date(StockServer.dummyData[sym][0].timestamp.getTime() + (1000*60)),
