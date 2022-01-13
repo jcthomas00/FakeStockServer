@@ -41,7 +41,7 @@ var StockServer = /** @class */ (function () {
             _this.maxmin[sym] = { max: max, min: min };
             var iterations = 100 * 24 * 60;
             var edge_var = 2;
-            var time = Date.now();
+            var time = new Date().setUTCHours(0, 0, 0, 0);
             var prevOpen = '', bool = true;
             var open = '';
             for (var i = 0; i < iterations; i++) {

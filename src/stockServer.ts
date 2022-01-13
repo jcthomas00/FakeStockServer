@@ -58,7 +58,7 @@ export class StockServer {
             const iterations = 100 * 24 * 60;
             const edge_var = 2;
 
-            const time = Date.now()
+            const time = new Date().setUTCHours(0, 0, 0, 0);
             let prevOpen = '', bool = true;
             let open = '';
             for (let i = 0; i<iterations; i++)
