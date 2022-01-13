@@ -55,10 +55,11 @@ export class StockServer {
 
             this.maxmin[sym] = {max: max, min: min};
 
-            const iterations = 100 * 24 * 60;
+            const time = new Date().setUTCHours(0, 0, 0, 0);
+
+            const iterations = (100 * 24 * 60) + Math.floor((Date.now()-time) / 1000);
             const edge_var = 2;
 
-            const time = new Date().setUTCHours(0, 0, 0, 0);
             let prevOpen = '', bool = true;
             let open = '';
             for (let i = 0; i<iterations; i++)
