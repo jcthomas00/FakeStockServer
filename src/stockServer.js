@@ -39,8 +39,9 @@ var StockServer = /** @class */ (function () {
             var max = orig;
             var min = max - 5;
             _this.maxmin[sym] = { max: max, min: min };
-            var time = new Date().setUTCHours(0, 0, 0, 0);
-            var iterations = (30 * 24 * 60) + Math.floor((Date.now() - time) / 1000);
+            var today = new Date().setUTCHours(0, 0, 0, 0);
+            var now = new Date().setUTCSeconds(0, 0);
+            var iterations = (30 * 24 * 60) + Math.floor((now - today) / 60000);
             var edge_var = 2;
             var prevOpen = '', bool = true;
             var open = '';
@@ -79,7 +80,7 @@ var StockServer = /** @class */ (function () {
                     high = ((rand > +prevOpen ? rand : +prevOpen) + (edge_var * Math.random())).toFixed(2);
                 }
                 StockServer.dummyData[sym].push({
-                    timestamp: new Date(time - (i * 1000 * 60)),
+                    timestamp: new Date(now - (i * 1000 * 60)),
                     open: open,
                     high: high,
                     low: low,

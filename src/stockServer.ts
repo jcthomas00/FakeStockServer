@@ -55,9 +55,10 @@ export class StockServer {
 
             this.maxmin[sym] = {max: max, min: min};
 
-            const time = new Date().setUTCHours(0, 0, 0, 0);
+            const today = new Date().setUTCHours(0, 0, 0, 0);
+            const now = new Date().setUTCSeconds(0, 0);
 
-            const iterations = (30 * 24 * 60) + Math.floor((Date.now()-time) / 1000);
+            const iterations = (30 * 24 * 60) + Math.floor((now-today) / 60000);
             const edge_var = 2;
 
             let prevOpen = '', bool = true;
@@ -112,7 +113,7 @@ export class StockServer {
                 }
 
                 StockServer.dummyData[sym].push({
-                    timestamp: new Date(time-(i*1000*60)),
+                    timestamp: new Date(now-(i*1000*60)),
                     open: open,
                     high: high,
                     low: low,
