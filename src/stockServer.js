@@ -35,7 +35,8 @@ var StockServer = /** @class */ (function () {
         var _this = this;
         StockServer.SYMBOLS.forEach(function (sym) {
             StockServer.dummyData[sym] = [];
-            var max = _this.myrand(200, 50);
+            var orig = _this.myrand(200, 50);
+            var max = orig;
             var min = max - 5;
             _this.maxmin[sym] = { max: max, min: min };
             var iterations = 100 * 24 * 60;
@@ -63,12 +64,14 @@ var StockServer = /** @class */ (function () {
                             min--;
                             max--;
                         }
-                        rand = min + _this.myrand(1, -.5);
+                        rand = min + _this.myrand(1, 0);
                     }
                     if (rand > max) {
-                        max++;
-                        min++;
-                        rand = max - _this.myrand(.5, -1);
+                        if (max < orig * 2) {
+                            max++;
+                            min++;
+                        }
+                        rand = max - _this.myrand(1, 0);
                     }
                     open = rand.toFixed(2);
                     low = ((rand < +prevOpen ? rand : +prevOpen) - (edge_var * Math.random())).toFixed(2);
@@ -96,14 +99,14 @@ var StockServer = /** @class */ (function () {
                         min--;
                         max--;
                     }
-                    rand = min + _this.myrand(1, -.5);
+                    rand = min + _this.myrand(1, 0);
                 }
                 if (rand > max) {
-                    if (max < 1000) {
+                    if (max < orig * 2) {
                         max++;
                         min++;
                     }
-                    rand = max - _this.myrand(.5, -1);
+                    rand = max - _this.myrand(1, 0);
                 }
                 close = rand.toFixed(2);
                 high = ((rand > +prevClose ? rand : +prevClose) + (edge_var * Math.random())).toFixed(2);

@@ -48,8 +48,9 @@ export class StockServer {
     {
         StockServer.SYMBOLS.forEach((sym) => {
             StockServer.dummyData[sym] = [];
-
-            let max = this.myrand(200, 50);
+            
+            const orig = this.myrand(200, 50);
+            let max = orig;
             let min = max - 5;
 
             this.maxmin[sym] = {max: max, min: min};
@@ -90,13 +91,16 @@ export class StockServer {
                             min--;
                             max--;
                         }
-                        rand = min + this.myrand(1, -.5);
+                        rand = min + this.myrand(1, 0);
                     }
                     if (rand > max)
                     {
-                        max++;
-                        min++;
-                        rand = max - this.myrand(.5, -1);
+                        if (max < orig*2)
+                        {
+                            max++;
+                            min++;
+                        }
+                        rand = max - this.myrand(1, 0);
                     }
 
                     open = rand.toFixed(2);
@@ -133,16 +137,16 @@ export class StockServer {
                         min--;
                         max--;
                     }
-                    rand = min + this.myrand(1, -.5);
+                    rand = min + this.myrand(1, 0);
                 }
                 if (rand > max)
                 {
-                    if (max < 1000)
+                    if (max < orig*2)
                     {
                         max++;
                         min++;
                     }
-                    rand = max - this.myrand(.5, -1);
+                    rand = max - this.myrand(1, 0);
                 }
 
                 close = rand.toFixed(2);
