@@ -61,8 +61,8 @@ export class StockServer {
             const time = Date.now()
             let prevOpen = '', bool = true;
             let open = '';
-            for(let i = 0; i<iterations; i++){
-
+            for (let i = 0; i<iterations; i++)
+            {
                 let high = "";
                 let close = "";
                 let low = "";
@@ -118,6 +118,9 @@ export class StockServer {
                     close: close,
                 })
                 prevOpen = open;
+
+                this.maxmin[sym].max = max;
+                this.maxmin[sym].min = min;
             }
 
             let interval = setInterval(() => {
@@ -126,7 +129,17 @@ export class StockServer {
                 let low = "";
                 let prevClose = StockServer.dummyData[sym][0].close;
 
-                console.log(max, min);
+                console.log(sym, this.maxmin, max, min);
+
+                if (max != this.maxmin[sym].max)
+                {
+                    max = this.maxmin[sym].max;
+                }
+
+                if (min != this.maxmin[sym].min)
+                {
+                    min = this.maxmin[sym].min;
+                }
 
                 let rand = +prevClose + this.myrand(2, -2);
 

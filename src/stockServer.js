@@ -86,13 +86,21 @@ var StockServer = /** @class */ (function () {
                     close: close_1
                 });
                 prevOpen = open;
+                _this.maxmin[sym].max = max;
+                _this.maxmin[sym].min = min;
             }
             var interval = setInterval(function () {
                 var close = "";
                 var high = "";
                 var low = "";
                 var prevClose = StockServer.dummyData[sym][0].close;
-                console.log(max, min);
+                console.log(sym, _this.maxmin, max, min);
+                if (max != _this.maxmin[sym].max) {
+                    max = _this.maxmin[sym].max;
+                }
+                if (min != _this.maxmin[sym].min) {
+                    min = _this.maxmin[sym].min;
+                }
                 var rand = +prevClose + _this.myrand(2, -2);
                 if (rand < min) {
                     if (min > 20) {
