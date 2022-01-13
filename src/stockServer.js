@@ -86,8 +86,6 @@ var StockServer = /** @class */ (function () {
                     close: close_1
                 });
                 prevOpen = open;
-                _this.maxmin[sym].max = max;
-                _this.maxmin[sym].min = min;
             }
             var first = true;
             var interval = setInterval(function () {

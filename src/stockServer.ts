@@ -118,9 +118,6 @@ export class StockServer {
                     close: close,
                 })
                 prevOpen = open;
-
-                this.maxmin[sym].max = max;
-                this.maxmin[sym].min = min;
             }
 
             let first = true;
