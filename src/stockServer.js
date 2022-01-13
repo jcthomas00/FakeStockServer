@@ -40,7 +40,7 @@ var StockServer = /** @class */ (function () {
             var min = max - 5;
             _this.maxmin[sym] = { max: max, min: min };
             var time = new Date().setUTCHours(0, 0, 0, 0);
-            var iterations = (100 * 24 * 60) + Math.floor((Date.now() - time) / 1000);
+            var iterations = (30 * 24 * 60) + Math.floor((Date.now() - time) / 1000);
             var edge_var = 2;
             var prevOpen = '', bool = true;
             var open = '';
