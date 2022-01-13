@@ -136,17 +136,8 @@ export class StockServer {
                 if (first)
                 {
                     first = false;
-
-                    if (max != this.maxmin[sym].max)
-                    {
-                        max = this.maxmin[sym].max;
-                    }
-    
-                    if (min != this.maxmin[sym].min)
-                    {
-                        min = this.maxmin[sym].min;
-                    }
-
+                    max = this.maxmin[sym].max;
+                    min = this.maxmin[sym].min;
                     console.log(sym, this.maxmin, max, min);
                 }
 

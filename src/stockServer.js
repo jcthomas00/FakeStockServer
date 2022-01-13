@@ -98,12 +98,8 @@ var StockServer = /** @class */ (function () {
                 console.log(sym, _this.maxmin, max, min);
                 if (first) {
                     first = false;
-                    if (max != _this.maxmin[sym].max) {
-                        max = _this.maxmin[sym].max;
-                    }
-                    if (min != _this.maxmin[sym].min) {
-                        min = _this.maxmin[sym].min;
-                    }
+                    max = _this.maxmin[sym].max;
+                    min = _this.maxmin[sym].min;
                     console.log(sym, _this.maxmin, max, min);
                 }
                 var rand = +prevClose + _this.myrand(2, -2);
